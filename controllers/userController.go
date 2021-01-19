@@ -82,3 +82,23 @@ func RegisterUser(c *gin.Context) {
 	db.Create(&user)
 	c.JSON(http.StatusOK, gin.H{"data:": user})
 }
+
+func LoginUser(c *gin.Context) {
+	db := c.MustGet("db").(*gorm.DB)
+
+	//validation
+	var input UserController
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	//input
+	user := models.User{
+		Email:    input.Email,
+		Password: input.Password,
+	}
+
+	db.Create(&user)
+	c.JSON(http.StatusOK, gin.H{"data:": user})
+}
